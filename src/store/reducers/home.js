@@ -1,10 +1,11 @@
 import * as types from '../actionTypes'
 
 const defaultState = {
-  avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+  avatar: 'https://avatars0.githubusercontent.com/u/33346345?s=400&v=4',
   description: '个人描述',
   name: '姓名',
-  loading: false
+  loading: false,
+  result: null
 }
 
 export default (state = defaultState, action) => {
@@ -14,6 +15,8 @@ export default (state = defaultState, action) => {
       return { ...state, avatar: action.payload.avatar_url, description: bio, name }
     case types.TOGGLE_LOADING:
       return { ...state, loading: action.payload }
+    case types.GET_REQUEST_RESULT:
+      return { ...state, result: action.payload }
     default:
       return state
   }

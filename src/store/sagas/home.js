@@ -1,33 +1,44 @@
 
 import axios from 'axios'
-import { put, call, cancelled, all, takeLatest } from 'redux-saga/effects'
-import { GET_PERSON_DATA } from '../actionTypes'
-import { getPersonDataAction, getDataErrorAction, toggleLoading } from '../actionCreators/home'
+import { put, take, call, fork, cancel, cancelled, all, takeLatest } from 'redux-saga/effects'
+import { delay } from 'redux-saga'
+import { GET_PERSON_DATA, CANCEL_PERSON_REQUEST } from '../actionTypes'
+import { getPersonDataAction, toggleLoading, getRequestResult } from '../actionCreators/home'
 
 function* getPersonData (action) {
   try {
     yield put(toggleLoading(true))
     const userName = action.payload
     const url = `https://api.github.com/users/${userName}`
-    const params = { cancelType: 'CANCEL_REQUEST', timeOut: 5000 }
-    const api = () => axios.get(url, params)
+    const api = () => axios.get(url)
+    yield delay(2000)
     const result = yield call(api)
     if (result) {
-      console.log(result.data)
       yield put(getPersonDataAction(result.data))
+      yield put(getRequestResult(1))
     }
   } catch (e) {
-    yield put(getDataErrorAction(e))
+    yield put(getRequestResult(3))
+    console.log(e)
   } finally {
-    const isCanceled = yield cancelled()
-    console.log(isCanceled)
+    if (yield cancelled()) {
+      yield put(getRequestResult(2))
+    }
     yield put(toggleLoading(false))
+  }
+}
+
+function* watchPersonData () {
+  while (true) {
+    const task = yield fork(takeLatest, GET_PERSON_DATA, getPersonData)
+    yield take(CANCEL_PERSON_REQUEST)
+    yield cancel(task)
   }
 }
 
 function* watchHome () {
   yield all([
-    yield takeLatest(GET_PERSON_DATA, getPersonData)
+    yield fork(watchPersonData)
   ])
 }
 

@@ -5,10 +5,6 @@ export const getPersonDataAction = (payload) => ({
   payload
 })
 
-export const getDataErrorAction = () => ({
-  type: types.GET_DATA_ERROR_ACTION
-})
-
 export const getPersonData = (payload) => ({
   type: types.GET_PERSON_DATA,
   payload
@@ -16,5 +12,14 @@ export const getPersonData = (payload) => ({
 
 export const toggleLoading = (payload) => ({
   type: types.TOGGLE_LOADING,
+  payload
+})
+
+export const cancelGetPersonData = () => ({
+  type: types.CANCEL_PERSON_REQUEST
+})
+
+export const getRequestResult = (payload) => ({
+  type: types.GET_REQUEST_RESULT,
   payload
 })
