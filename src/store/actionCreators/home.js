@@ -23,3 +23,7 @@ export const getRequestResult = (payload) => ({
   type: types.GET_REQUEST_RESULT,
   payload
 })
+
+export const resetState = () => ({
+  type: types.RESET_DATA
+})

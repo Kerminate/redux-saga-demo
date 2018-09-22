@@ -2,8 +2,16 @@ import React, { Component } from 'react'
 import { Card, Button, message } from 'antd'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { getPersonData, cancelGetPersonData } from '../../store/actionCreators/home'
+import { getPersonData, cancelGetPersonData, resetState } from '../../store/actionCreators/home'
 import './home.less'
+
+const info = {
+  name: 'yyx990803'
+}
+const timeOutInfo = {
+  name: 'yyx990803',
+  timeout: 100
+}
 
 class Home extends Component {
   componentDidUpdate (prevProps) {
@@ -20,7 +28,7 @@ class Home extends Component {
   }
   render () {
     const { Meta } = Card
-    const { avatar, description, name, loading, handleGetData, handleCancel } = this.props
+    const { avatar, description, name, loading, handleGetData, handleCancel, handleReset } = this.props
     return (
       <div className='home'>
         <Card
@@ -28,8 +36,9 @@ class Home extends Component {
           loading={loading}
           cover={loading ? <div className='img-place' /> : <img alt='example' src={avatar} />}
           actions={[
-            <Button type='primary' onClick={() => handleGetData('yyx990803')} >开始异步请求</Button>,
-            <Button type='danger' onClick={() => handleCancel()}>取消异步请求</Button>
+            <Button type='primary' onClick={() => handleGetData(info)}>开始请求</Button>,
+            <Button type='dashed' onClick={() => handleGetData(timeOutInfo)}>开始请求</Button>,
+            <Button type='danger' onClick={() => handleCancel()}>取消请求</Button>
           ]}
         >
           <Meta
@@ -37,6 +46,7 @@ class Home extends Component {
             description={description}
           />
         </Card>
+        <Button className='refresh' type='primary' size='large' ghost onClick={() => handleReset()}>重置</Button>
       </div>
     )
   }
@@ -49,7 +59,8 @@ Home.propTypes = {
   loading: PropTypes.bool,
   result: PropTypes.number,
   handleGetData: PropTypes.func,
-  handleCancel: PropTypes.func
+  handleCancel: PropTypes.func,
+  handleReset: PropTypes.func
 }
 
 const mapStatesToProps = (state) => {
@@ -64,11 +75,14 @@ const mapStatesToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    handleGetData (name) {
-      dispatch(getPersonData(name))
+    handleGetData (payload) {
+      dispatch(getPersonData(payload))
     },
     handleCancel () {
       dispatch(cancelGetPersonData())
+    },
+    handleReset () {
+      dispatch(resetState())
     }
   }
 }

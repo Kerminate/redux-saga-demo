@@ -8,9 +8,12 @@ import { getPersonDataAction, toggleLoading, getRequestResult } from '../actionC
 function* getPersonData (action) {
   try {
     yield put(toggleLoading(true))
-    const userName = action.payload
+    const userName = action.payload.name
+    // 设置请求的超时时间
+    const timeout = action.payload.timeout || 5000
     const url = `https://api.github.com/users/${userName}`
     const api = () => axios.get(url)
+    axios.defaults.timeout = timeout
     yield delay(2000)
     const result = yield call(api)
     if (result) {

@@ -17,6 +17,8 @@ export default (state = defaultState, action) => {
       return { ...state, loading: action.payload }
     case types.GET_REQUEST_RESULT:
       return { ...state, result: action.payload }
+    case types.RESET_DATA:
+      return defaultState
     default:
       return state
   }
