@@ -37,7 +37,7 @@ class Home extends Component {
           cover={loading ? <div className='img-place' /> : <img alt='example' src={avatar} />}
           actions={[
             <Button type='primary' onClick={() => handleGetData(info)}>开始请求</Button>,
-            <Button type='dashed' onClick={() => handleGetData(timeOutInfo)}>开始请求</Button>,
+            <Button type='dashed' onClick={() => handleGetData(timeOutInfo)}>超时请求</Button>,
             <Button type='danger' onClick={() => handleCancel()}>取消请求</Button>
           ]}
         >
